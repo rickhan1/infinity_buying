@@ -31,11 +31,9 @@ def get_closing_prices(tickers: list[str], date: str | None = None) -> dict[str,
             stock = yf.Ticker(ticker)
 
             if date:
-                # 특정 날짜의 종가 조회
-                target_date = datetime.strptime(date, "%Y-%m-%d")
-                start = target_date.strftime("%Y-%m-%d")
-                end = (target_date + timedelta(days=1)).strftime("%Y-%m-%d")
-                hist = stock.history(start=start, end=end)
+                # 특정 날짜의 종가 조회 (안전성을 위해 최근 5일치를 가져와서 매칭)
+                hist = stock.history(period="5d")
+                hist = hist[hist.index.strftime("%Y-%m-%d") <= date]
             else:
                 # 가장 최근 거래일 종가 조회
                 hist = stock.history(period="1d")
