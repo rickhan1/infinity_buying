@@ -1,0 +1,91 @@
+.dashboard-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.summary-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.summary-card h3 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+.summary-card .value {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.summary-card .profit.positive { color: var(--accent-green); }
+.summary-card .profit.negative { color: var(--accent-red); }
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+th, td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--glass-border);
+  font-size: 0.95rem;
+}
+th {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.action-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.1);
+}
+.action-buy_full { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+.action-buy_half { background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); }
+.action-unfilled { background: rgba(148, 163, 184, 0.2); color: var(--text-secondary); }
+.action-sell_profit { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+.action-sell_loss { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+
+.tab-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.tab-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.tab-btn.active {
+  color: var(--accent-cyan);
+  border-bottom: 2px solid var(--accent-cyan);
+}
+.tab-btn:hover:not(.active) {
+  color: var(--text-primary);
+}
