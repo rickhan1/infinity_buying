@@ -56,6 +56,8 @@ def main(dry_run: bool = False, date: str | None = None) -> None:
         prices = get_closing_prices(TICKERS, trade_date)
         if all(p is None for p in prices.values()):
             logger.warning("모든 종목의 종가 데이터를 가져올 수 없습니다. 비거래일 가능성.")
+            from send_notification import send_telegram
+            send_telegram(f"⚠️ [{trade_date}] 종가 데이터 수집 실패 (비거래일 또는 Yahoo Finance 차단 장애)")
             return
 
         # ──────────────────────────────────────────
