@@ -10,6 +10,14 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [activeTab, setActiveTab] = useState('TQQQ')
+  const [lang, setLang] = useState('ko')
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('lang') === 'en') {
+      setLang('en');
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,7 +26,6 @@ function App() {
         if (!response.ok) throw new Error('Failed to fetch state data.')
         const result = await response.json()
         setData(result)
-        // Set first key as active tab if 'TQQQ' doesn't exist
         if (!result['TQQQ']) {
           setActiveTab(Object.keys(result)[0])
         }
@@ -34,7 +41,7 @@ function App() {
   if (loading) {
     return (
       <div className="app-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <h2 className="text-gradient">데이터 불러오는 중...</h2>
+        <h2 className="text-gradient">{lang === 'en' ? 'Loading Data...' : '데이터 불러오는 중...'}</h2>
       </div>
     )
   }
@@ -43,7 +50,7 @@ function App() {
     return (
       <div className="app-container">
         <div className="glass-panel" style={{ color: 'var(--accent-red)' }}>
-          <h2>에러 발생</h2>
+          <h2>{lang === 'en' ? 'Error occurred' : '에러 발생'}</h2>
           <p>{error}</p>
         </div>
       </div>
@@ -54,12 +61,12 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1 className="title text-gradient">Infinity Buying 실시간 대시보드</h1>
+      <h1 className="title text-gradient">
+        {lang === 'en' ? 'Infinity Buying Live Dashboard' : 'Infinity Buying 실시간 대시보드'}
+      </h1>
       
-      {/* 최고 상단 통합 요약 카드 */}
-      <SummaryCards data={data} />
+      <SummaryCards data={data} lang={lang} />
 
-      {/* 종목 탭 셀렉터 */}
       <div style={{ marginTop: '3rem' }}>
         <div className="tab-buttons animate-fade-in">
           {Object.keys(data).map(ticker => (
@@ -73,14 +80,15 @@ function App() {
           ))}
         </div>
 
-        {/* 선택된 종목의 챠트와 히스토리 표 */}
         {currentHistory.length > 0 ? (
           <>
-            <InteractiveChart history={currentHistory} />
-            <HistoryTable history={currentHistory} />
+            <InteractiveChart history={currentHistory} lang={lang} />
+            <HistoryTable history={currentHistory} lang={lang} />
           </>
         ) : (
-          <div className="glass-panel animate-fade-in">이 종목의 시뮬레이션 히스토리가 아직 없습니다.</div>
+          <div className="glass-panel animate-fade-in">
+            {lang === 'en' ? 'No simulation history available for this ticker yet.' : '이 종목의 시뮬레이션 히스토리가 아직 없습니다.'}
+          </div>
         )}
       </div>
     </div>
