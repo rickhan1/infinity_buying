@@ -1,0 +1,43 @@
+name: Daily Infinite Buying Simulation
+
+on:
+  schedule:
+    # EDT 기간 (3월~11월): 장마감 4PM ET + 30분 = 4:30 PM ET = 20:30 UTC
+    - cron: '30 20 * * 1-5'
+    # EST 기간 (11월~3월): 장마감 4PM ET + 30분 = 4:30 PM ET = 21:30 UTC
+    - cron: '30 21 * * 1-5'
+  workflow_dispatch:  # 수동 실행 가능
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run daily simulation
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GOOGLE_SHEETS_ID: ${{ secrets.GOOGLE_SHEETS_ID }}
+          GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+        run: python execution/daily_run.py
+
+      - name: Commit and push state changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/state.json
+          git diff --cached --quiet || git commit -m "📊 Daily trade update: $(date -u +%Y-%m-%d)"
+          git push
