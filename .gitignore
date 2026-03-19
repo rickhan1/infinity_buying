@@ -32,3 +32,13 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Media/Assets
+*.mp4
+*.mp3
+*.vtt
+*.png
+temp/
+EOF/
+EOF
+
