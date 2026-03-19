@@ -31,11 +31,11 @@ def main():
             
             if upload_ready:
                 if lang == "ko":
-                    title = f"🤖 로봇은 실수하지 않는다! 무한매수법 {trade_date} 성과보고 #Shorts"
-                    desc = f"📈 평생 감정없이 기계적으로 매매하는 심장 없는 로봇개미 관찰 카메라입니다!\n\n날짜: {trade_date}\n\n[이 영상은 매일 100% 무료 파이프라인으로 '기계'가 전 과정 자동 생성 및 업로드합니다. 구독하시고 생존 여부를 지켜보세요! 🔥]"
+                    title = f"무한매수법 챌린지 {trade_date} 매매 일지 #Shorts"
+                    desc = f"📈 TQQQ, SOLX 무한매수법 실전 투자 기록입니다.\n\n날짜: {trade_date}\n오늘의 매매 현황과 계좌 상태를 공유합니다.\n매일 꾸준한 기록으로 성취감을 쌓아갑니다. 함께 성투해요! 🚀"
                 else:
-                    title = f"🤖 Bot Logic Never Fails! Infinity Buying Result ({trade_date}) #Shorts"
-                    desc = f"📈 Completely emotionless algorithmic trading live test!\nDate: {trade_date}\n\n[This video is 100% procedurally generated and uploaded by an automated Python script algorithm.]"
+                    title = f"Infinity Buying Strategy Day {trade_date} #Shorts"
+                    desc = f"📈 Real-world TQQQ & SOLX trading log.\nDate: {trade_date}\n\nSharing today's trading status and portfolio updates. Let's keep marching forward together! 🚀"
                 
                 upload_video(video_path, title, desc, lang)
             else:
