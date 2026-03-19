@@ -183,15 +183,22 @@ async def take_screenshots(out_dir, lang="ko"):
         page = await context.new_page()
         
         # ⚡ 데이터 동기화 레이스 컨디션 방지 아키텍처
-        # 깃허브 페이지 배포 지연(~1분)을 우회하고 가장 타임스탬프가 빠른 최신 데이터를 캡처하기 위해, 로컬 서버(localhost:5173)를 타겟팅합니다.
-        # Vite의 base 설정(/infinity_buying/)을 반드시 경로에 포함해야 합니다.
-        url = f"http://localhost:5173/infinity_buying/?lang={lang}"
+        # localhost 대신 명시적인 loopback(127.0.0.1) 주소를 사용하여 DNS 확인 시간 단축 및 접속 안정성 증대
+        url = f"http://127.0.0.1:5173/infinity_buying/?lang={lang}"
         print(f"🌐 라이브 대시보드({lang.upper()}) 모바일 씬(Scene)별 캡쳐 중... (URL: {url})")
-        await page.goto(url)
         
-        wait_text = "text=총 투자 원금" if lang == "ko" else "text=Initial Capital"
-        # 서버 기동 및 데이터 로딩 시간을 고려하여 30초로 넉넉하게 연장
-        await page.wait_for_selector(wait_text, timeout=30000)
+        try:
+            await page.goto(url, wait_until="networkidle", timeout=30000)
+            
+            wait_text = "text=총 투자 원금" if lang == "ko" else "text=Initial Capital"
+            # 서버 기동 및 데이터 로딩 시간을 고려하여 30초로 넉넉하게 연장
+            await page.wait_for_selector(wait_text, timeout=30000)
+        except Exception as e:
+            print(f"❌ Playwright 캡처 중 오류 발생: {e}")
+            print("--- 현재 페이지 HTML 소스 (디버깅용) ---")
+            print(await page.content())
+            print("---------------------------------------")
+            raise e
         await asyncio.sleep(5)
         
         # 1. TQQQ Chart (Top)

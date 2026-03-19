@@ -25,10 +25,11 @@ function App() {
         // 로컬 환경(GitHub Actions 임시 렌더러 포함)에서는 빌드 전 복사된 최신 로컬 캐시를 읽고,
         // 실서버 깃허브 페이지에서는 클라우드 주소를 읽도록 분기처리하여 CDN 지연(Race condition) 타임아웃 붕괴를 완벽 차단.
         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        const url = isLocal 
-          ? '/data/state.json' 
-          : 'https://raw.githubusercontent.com/rickhan1/infinity_buying/main/data/state.json';
-        
+        // GitHub Actions 및 로컬 환경에서는 Vite Base URL을 포함한 절대 경로로 접근하여 404 방어
+        const url = isLocal
+          ? '/infinity_buying/data/state.json'
+          : `https://raw.githubusercontent.com/rickhan1/infinity_buying/main/data/state.json`; // The instruction's remote URL had ?t=, but the fetch call below also adds it. I'll keep the base URL here.
+
         const response = await fetch(url + '?t=' + new Date().getTime()) // 캐시 무력화
         if (!response.ok) throw new Error('Failed to fetch state data.')
         const result = await response.json()
