@@ -1,12 +1,11 @@
 {
   "TQQQ": {
+    "status": "active",
     "cycle": 1,
     "buy_count": 1,
     "total_shares": 54.229935,
     "total_cost": 2500.0,
     "cash_balance": 97500.0,
-    "initial_capital": 100000,
-    "status": "active",
     "history": [
       {
         "date": "2026-03-18",
@@ -27,13 +26,12 @@
     ]
   },
   "SOLX": {
+    "status": "active",
     "cycle": 1,
     "buy_count": 1,
     "total_shares": 236.78727,
     "total_cost": 2500.0,
     "cash_balance": 97500.0,
-    "initial_capital": 100000,
-    "status": "active",
     "history": [
       {
         "date": "2026-03-18",
