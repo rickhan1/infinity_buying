@@ -47,9 +47,14 @@ jobs:
           def decode(env_name, path):
               val = os.environ.get(env_name, '').strip()
               if not val: return
-              # base64에 허용되지 않는 문자(공백 등) 모두 제거
-              clean = ''.join(c for c in val if c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=')
-              with open(path, 'wb') as f: f.write(base64.b64decode(clean))
+              # base64 유효 문자만 추출
+              clean = ''.join(c for c in val if c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/')
+              # 누락된 패딩(=) 기호 자동 보정 (4의 배수)
+              clean += '=' * ((4 - len(clean) % 4) % 4)
+              try:
+                  with open(path, 'wb') as f: f.write(base64.b64decode(clean))
+              except Exception as e:
+                  print(f'Error decoding {env_name}: {e}')
           
           decode('CLIENT_SECRET_B64', 'client_secret.json')
           os.makedirs('execution/youtube', exist_ok=True)
