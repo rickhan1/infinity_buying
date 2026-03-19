@@ -69,19 +69,15 @@ jobs:
           GOOGLE_SHEETS_ID: ${{ secrets.GOOGLE_SHEETS_ID }}
           GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
         run: |
-          source venv/bin/activate
           # 매수 및 대시보드 갱신
           python execution/daily_run.py
           
       - name: Playwright install browsers
         run: |
-          source venv/bin/activate
           playwright install --with-deps chromium
           
       - name: Generate and Upload YouTube Shorts
         run: |
-          source venv/bin/activate
-          
           # CDN 캐시 레이아웃 방어를 위해 가장 최근 생성된 매매 데이터를 프론트엔드 정적 폴더에 강제 복제
           mkdir -p frontend/public/data
           cp data/state.json frontend/public/data/state.json
