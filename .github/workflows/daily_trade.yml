@@ -36,14 +36,26 @@ jobs:
           sudo sed -i '/<policy domain="path" rights="none" pattern="@\*"/d' /etc/ImageMagick-6/policy.xml
 
       - name: Restore YouTube Tokens
+        env:
+          CLIENT_SECRET_B64: ${{ secrets.YOUTUBE_CLIENT_SECRET_B64 }}
+          TOKEN_KO_B64: ${{ secrets.YOUTUBE_TOKEN_KO_B64 }}
+          TOKEN_EN_B64: ${{ secrets.YOUTUBE_TOKEN_EN_B64 }}
         run: |
-          echo "${{ secrets.YOUTUBE_CLIENT_SECRET_B64 }}" | base64 -d -i > client_secret.json
-          mkdir -p execution/youtube
-          echo "${{ secrets.YOUTUBE_TOKEN_KO_B64 }}" | base64 -d -i > execution/youtube/token_ko.pickle
-          # 영어 채널 토큰은 있을 경우에만 전개
-          if [ -n "${{ secrets.YOUTUBE_TOKEN_EN_B64 }}" ]; then
-            echo "${{ secrets.YOUTUBE_TOKEN_EN_B64 }}" | base64 -d -i > execution/youtube/token_en.pickle
-          fi
+          # Python을 사용하여 공백/줄바꿈 등이 포함된 경우에도 안전하게 디코딩
+          python3 -c "
+          import base64, os
+          def decode(env_name, path):
+              val = os.environ.get(env_name, '').strip()
+              if not val: return
+              # base64에 허용되지 않는 문자(공백 등) 모두 제거
+              clean = ''.join(c for c in val if c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=')
+              with open(path, 'wb') as f: f.write(base64.b64decode(clean))
+          
+          decode('CLIENT_SECRET_B64', 'client_secret.json')
+          os.makedirs('execution/youtube', exist_ok=True)
+          decode('TOKEN_KO_B64', 'execution/youtube/token_ko.pickle')
+          decode('TOKEN_EN_B64', 'execution/youtube/token_en.pickle')
+          "
 
       - name: Process Daily Trade
         env:
