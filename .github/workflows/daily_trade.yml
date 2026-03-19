@@ -37,12 +37,12 @@ jobs:
 
       - name: Restore YouTube Tokens
         run: |
-          echo "${{ secrets.YOUTUBE_CLIENT_SECRET_B64 }}" | base64 -d > client_secret.json
+          echo "${{ secrets.YOUTUBE_CLIENT_SECRET_B64 }}" | base64 -d -i > client_secret.json
           mkdir -p execution/youtube
-          echo "${{ secrets.YOUTUBE_TOKEN_KO_B64 }}" | base64 -d > execution/youtube/token_ko.pickle
+          echo "${{ secrets.YOUTUBE_TOKEN_KO_B64 }}" | base64 -d -i > execution/youtube/token_ko.pickle
           # 영어 채널 토큰은 있을 경우에만 전개
           if [ -n "${{ secrets.YOUTUBE_TOKEN_EN_B64 }}" ]; then
-            echo "${{ secrets.YOUTUBE_TOKEN_EN_B64 }}" | base64 -d > execution/youtube/token_en.pickle
+            echo "${{ secrets.YOUTUBE_TOKEN_EN_B64 }}" | base64 -d -i > execution/youtube/token_en.pickle
           fi
 
       - name: Process Daily Trade
