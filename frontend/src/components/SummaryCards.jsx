@@ -4,7 +4,7 @@ import '../Dashboard.css';
 export default function SummaryCards({ data, lang }) {
   if (!data) return null;
 
-  const totalCapital = Object.values(data).reduce((acc, curr) => acc + curr.initial_capital, 0);
+  const totalCapital = Object.values(data).reduce((acc, curr) => acc + (curr.initial_capital || 100000), 0);
   const totalCost = Object.values(data).reduce((acc, curr) => acc + curr.total_cost, 0);
   const totalEval = Object.values(data).reduce((acc, curr) => {
     const history = curr.history || [];

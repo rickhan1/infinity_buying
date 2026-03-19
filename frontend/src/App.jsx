@@ -22,7 +22,14 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://raw.githubusercontent.com/rickhan1/infinity_buying/main/data/state.json')
+        // 로컬 환경(GitHub Actions 임시 렌더러 포함)에서는 빌드 전 복사된 최신 로컬 캐시를 읽고,
+        // 실서버 깃허브 페이지에서는 클라우드 주소를 읽도록 분기처리하여 CDN 지연(Race condition) 타임아웃 붕괴를 완벽 차단.
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const url = isLocal 
+          ? '/data/state.json' 
+          : 'https://raw.githubusercontent.com/rickhan1/infinity_buying/main/data/state.json';
+        
+        const response = await fetch(url + '?t=' + new Date().getTime()) // 캐시 무력화
         if (!response.ok) throw new Error('Failed to fetch state data.')
         const result = await response.json()
         setData(result)
