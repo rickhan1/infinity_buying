@@ -2,6 +2,7 @@
   "TQQQ": {
     "status": "active",
     "cycle": 1,
+<<<<<<< Updated upstream
     "buy_count": 1,
     "total_shares": 54.229935,
     "total_cost": 2500.0,
@@ -24,10 +25,19 @@
         "cycle": 1
       }
     ]
+=======
+    "buy_count": 0,
+    "total_shares": 0.0,
+    "total_cost": 0.0,
+    "initial_capital": 100000,
+    "cash_balance": 100000,
+    "history": []
+>>>>>>> Stashed changes
   },
   "SOLX": {
     "status": "active",
     "cycle": 1,
+<<<<<<< Updated upstream
     "buy_count": 1,
     "total_shares": 236.78727,
     "total_cost": 2500.0,
@@ -50,5 +60,13 @@
         "cycle": 1
       }
     ]
+=======
+    "buy_count": 0,
+    "total_shares": 0.0,
+    "total_cost": 0.0,
+    "initial_capital": 100000,
+    "cash_balance": 100000,
+    "history": []
+>>>>>>> Stashed changes
   }
 }

@@ -182,9 +182,9 @@ async def take_screenshots(out_dir, lang="ko"):
         )
         page = await context.new_page()
         
-        # ⚡ 깃허브 배포 대기 없이 로컬 즉각 확인을 위한 dev 서버 포트 매핑 (완료)
-        # 로컬 테스트가 완료되었으므로, 이제 영원히 무인으로 돌아가도록 깃허브 액션 실서버(github.io) 도메인으로 복구합니다!
-        url = f"https://rickhan1.github.io/infinity_buying/?lang={lang}"
+        # ⚡ 데이터 동기화 레이스 컨디션 방지 아키텍처
+        # 깃허브 페이지 배포 지연(~1분)을 우회하고 가장 타임스탬프가 빠른 최신 데이터를 캡처하기 위해, 로컬 서버(localhost:5173)를 타겟팅합니다.
+        url = f"http://localhost:5173/?lang={lang}"
         print(f"🌐 라이브 대시보드({lang.upper()}) 모바일 씬(Scene)별 캡쳐 중... (URL: {url})")
         await page.goto(url)
         
