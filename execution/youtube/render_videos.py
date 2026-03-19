@@ -184,12 +184,14 @@ async def take_screenshots(out_dir, lang="ko"):
         
         # ⚡ 데이터 동기화 레이스 컨디션 방지 아키텍처
         # 깃허브 페이지 배포 지연(~1분)을 우회하고 가장 타임스탬프가 빠른 최신 데이터를 캡처하기 위해, 로컬 서버(localhost:5173)를 타겟팅합니다.
-        url = f"http://localhost:5173/?lang={lang}"
+        # Vite의 base 설정(/infinity_buying/)을 반드시 경로에 포함해야 합니다.
+        url = f"http://localhost:5173/infinity_buying/?lang={lang}"
         print(f"🌐 라이브 대시보드({lang.upper()}) 모바일 씬(Scene)별 캡쳐 중... (URL: {url})")
         await page.goto(url)
         
         wait_text = "text=총 투자 원금" if lang == "ko" else "text=Initial Capital"
-        await page.wait_for_selector(wait_text, timeout=15000)
+        # 서버 기동 및 데이터 로딩 시간을 고려하여 30초로 넉넉하게 연장
+        await page.wait_for_selector(wait_text, timeout=30000)
         await asyncio.sleep(5)
         
         # 1. TQQQ Chart (Top)
