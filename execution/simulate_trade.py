@@ -83,6 +83,7 @@ def execute_buy(position: dict, price: float, amount: float) -> dict:
 def reset_cycle(position: dict, reason: str, current_price: float) -> dict:
     """
     사이클을 리셋합니다 (익절/손절 후).
+    이전 사이클의 최종 평가금액을 다음 사이클의 원금으로 승계하여 누적합니다.
 
     Args:
         position: 현재 포지션
@@ -90,24 +91,30 @@ def reset_cycle(position: dict, reason: str, current_price: float) -> dict:
         current_price: 현재 종가
 
     Returns:
-        리셋된 포지션
+        리셋된 포지션 (누적 자산 반영)
     """
     evaluation = position["total_shares"] * current_price
+    # 새로운 시작 자산 = 현재 현금 잔고 + 주식 매도 대금(평가금)
+    new_capital = round(position["cash_balance"] + evaluation, 2)
+    
     profit = evaluation - position["total_cost"]
     profit_ratio = calculate_profit_ratio(position, current_price)
 
     logger.info(
         f"  {'🟢 익절' if reason == 'take_profit' else '🔴 손절'}! "
-        f"평가금: ${evaluation:.2f}, 손익: ${profit:+.2f} ({profit_ratio:+.2%})"
+        f"평가금: ${evaluation:.2f}, 최종 회수액: ${new_capital:.2f}, 손익: ${profit:+.2f} ({profit_ratio:+.2%})"
     )
 
-    # 사이클 리셋
+    # 사이클 리셋 및 자산 누적
     position["cycle"] += 1
     position["buy_count"] = 0
     position["total_shares"] = 0.0
     position["total_cost"] = 0.0
-    position["cash_balance"] = INITIAL_CAPITAL
+    position["initial_capital"] = new_capital
+    position["cash_balance"] = new_capital
     position["status"] = "active"
+
+    logger.info(f"  >>> 다음 사이클(#{position['cycle']}) 시작 자산: ${new_capital:.2f}")
 
     return position
 
@@ -161,27 +168,30 @@ def process_ticker(ticker: str, position: dict, closing_price: float, trade_date
             position["history"].append(record)
             return position
 
+    # 1회 매수 금액 동적 계산 (현재 원금의 1/40)
+    current_buy_amount = position["initial_capital"] / NUM_SPLITS
+
     # ──────────────────────────────────────────────
     # 2. 매수 로직 (LOC 방식)
     # ──────────────────────────────────────────────
     if position["buy_count"] >= NUM_SPLITS:
-        logger.info(f"  40회 매수 완료 — 추가 매수 없이 대기")
+        logger.info(f"  {NUM_SPLITS}회 매수 완료 — 추가 매수 없이 대기")
         action = "wait"
     elif position["buy_count"] == 0:
         # 첫 매수 (T=1): 종가 기준 전액 매수
-        buy_amount = min(BUY_AMOUNT_PER_SPLIT, position["cash_balance"])
+        buy_amount = min(current_buy_amount, position["cash_balance"])
         position = execute_buy(position, closing_price, buy_amount)
         buy_shares = buy_amount / closing_price
         action = "buy_full"
     elif closing_price <= avg_price:
         # 종가 ≤ 평단가: 전액 매수
-        buy_amount = min(BUY_AMOUNT_PER_SPLIT, position["cash_balance"])
+        buy_amount = min(current_buy_amount, position["cash_balance"])
         position = execute_buy(position, closing_price, buy_amount)
         buy_shares = buy_amount / closing_price
         action = "buy_full"
     elif closing_price <= avg_price * (1 + ALPHA):
         # 평단가 < 종가 ≤ 평단가 × (1 + α): 절반 매수
-        buy_amount = min(BUY_AMOUNT_PER_SPLIT / 2, position["cash_balance"])
+        buy_amount = min(current_buy_amount / 2, position["cash_balance"])
         position = execute_buy(position, closing_price, buy_amount)
         buy_shares = buy_amount / closing_price
         action = "buy_half"
