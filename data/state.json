@@ -119,17 +119,33 @@
         "cash_balance": 95350.4,
         "buy_count": 2,
         "cycle": 5
+      },
+      {
+        "date": "2026-04-17",
+        "ticker": "TQQQ",
+        "closing_price": 58.59,
+        "action": "no_fill",
+        "buy_amount": 0.0,
+        "buy_shares": 0.0,
+        "total_shares": 66.448051,
+        "total_cost": 3714.95,
+        "avg_price": 55.9076,
+        "evaluation": 3893.19,
+        "profit_ratio": 0.047979,
+        "cash_balance": 95350.4,
+        "buy_count": 2,
+        "cycle": 5
       }
     ]
   },
   "SOLX": {
     "status": "active",
     "cycle": 3,
-    "buy_count": 0,
-    "total_shares": 0.0,
-    "total_cost": 0.0,
+    "buy_count": 1,
+    "total_shares": 246.453431,
+    "total_cost": 2498.99,
     "initial_capital": 99959.54,
-    "cash_balance": 99959.54,
+    "cash_balance": 97460.55,
     "history": [
       {
         "date": "2026-04-08",
@@ -242,6 +258,22 @@
         "cash_balance": 92395.84,
         "buy_count": 3,
         "cycle": 2
+      },
+      {
+        "date": "2026-04-17",
+        "ticker": "SOLX",
+        "closing_price": 10.1398,
+        "action": "buy_full",
+        "buy_amount": 2498.99,
+        "buy_shares": 246.453431,
+        "total_shares": 246.453431,
+        "total_cost": 2498.99,
+        "avg_price": 10.1398,
+        "evaluation": 2498.99,
+        "profit_ratio": -1e-06,
+        "cash_balance": 97460.55,
+        "buy_count": 1,
+        "cycle": 3
       }
     ]
   }
