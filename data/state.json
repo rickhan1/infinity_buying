@@ -1271,6 +1271,22 @@
         "cash_balance": 88820.24,
         "buy_count": 3,
         "cycle": 12
+      },
+      {
+        "date": "2026-07-31",
+        "ticker": "TQQQ",
+        "closing_price": 64.62,
+        "action": "no_fill",
+        "buy_amount": 0.0,
+        "buy_shares": 0.0,
+        "total_shares": 118.426683,
+        "total_cost": 7201.65,
+        "avg_price": 60.811,
+        "evaluation": 7652.73,
+        "profit_ratio": 0.062636,
+        "cash_balance": 88820.24,
+        "buy_count": 3,
+        "cycle": 12
       }
     ]
   },
