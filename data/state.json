@@ -2,11 +2,11 @@
   "TQQQ": {
     "status": "active",
     "cycle": 13,
-    "buy_count": 0,
-    "total_shares": 0.0,
-    "total_cost": 0.0,
+    "buy_count": 1,
+    "total_shares": 32.367188,
+    "total_cost": 2421.71,
     "initial_capital": 96868.52,
-    "cash_balance": 96868.52,
+    "cash_balance": 94446.81,
     "history": [
       {
         "date": "2026-04-08",
@@ -1303,6 +1303,22 @@
         "cash_balance": 88820.24,
         "buy_count": 3,
         "cycle": 12
+      },
+      {
+        "date": "2026-08-04",
+        "ticker": "TQQQ",
+        "closing_price": 74.82,
+        "action": "buy_full",
+        "buy_amount": 2421.71,
+        "buy_shares": 32.367188,
+        "total_shares": 32.367188,
+        "total_cost": 2421.71,
+        "avg_price": 74.8199,
+        "evaluation": 2421.71,
+        "profit_ratio": 1e-06,
+        "cash_balance": 94446.81,
+        "buy_count": 1,
+        "cycle": 13
       }
     ]
   },
